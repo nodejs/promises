@@ -21,6 +21,8 @@ Topics we'd like to cover:
 Working Group Members:
  - @benjamingr
  - @petkaantonov
+ - @vkurchatkin
+ - @trevnorris
  
 # Participation
 
