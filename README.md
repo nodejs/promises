@@ -24,6 +24,7 @@ Working Group Members:
  - @petkaantonov
  - @vkurchatkin
  - @trevnorris
+ - @kriskowal
  
 # Participation
 
