@@ -27,7 +27,7 @@ Working Group Members:
  - @kriskowal
  - @MadaraUchiha
  - @omsmith
- - thefourtheye
+ - @thefourtheye
  
 # Participation
 
