@@ -25,6 +25,7 @@ Working Group Members:
  - @vkurchatkin
  - @trevnorris
  - @kriskowal
+ - @MadaraUchiha
  
 # Participation
 
