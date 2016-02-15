@@ -19,6 +19,7 @@ Topics we'd like to cover:
  - How/if to get AsyncWrap to work with promises.
 
 Working Group Members:
+ - @chrisdickinson
  - @benjamingr
  - @petkaantonov
  - @vkurchatkin
