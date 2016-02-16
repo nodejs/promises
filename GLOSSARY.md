@@ -6,6 +6,26 @@ users may be deep-linking to the generated anchors.**
 
 ## Table of Contents
 
+* [Error Symposium](#error-symposium)
+  * [Operational Error](#operational-error)
+  * [Programmer Error](#programmer-error)
+  * [Expected versus Unexpected](#expected-versus-unexpected)
+* [Post Mortem Analysis](#post-mortem-analysis)
+  * [Abort](#abort)
+  * [Core / Core dump / Core file](#core--core-dump--core-file)
+  * [Stack Frame](#stack-frame)
+  * [Unwinding the Stack / Top of Stack](#unwinding-the-stack--top-of-stack)
+* [Promise](#promise)
+  * [Executor / Resolver](#executor--resolver)
+  * [Handler](#handler)
+  * [Settling](#settling)
+    * [Rejection / reject](#rejection--reject)
+    * [Resolving / resolve](#resolving--resolve)
+  * [Synchronous Rejection](#synchronous-rejection)
+  * [Unhandled Rejection / Rejection Handled](#unhandled-rejection--rejection-handled)
+  * [Microtask Queue](#microtask-queue)
+* [Links](#links)
+
 ## Error Symposium
 
 An ongoing series of facilitated discussions led by **@groundwater**, originally
