@@ -9,7 +9,6 @@ users may be deep-linking to the generated anchors.**
 * [Error Symposium](#error-symposium)
   * [Operational Error](#operational-error)
   * [Programmer Error](#programmer-error)
-  * [Expected versus Unexpected](#expected-versus-unexpected)
 * [Post Mortem Analysis](#post-mortem-analysis)
   * [Abort](#abort)
   * [Core / Core dump / Core file](#core--core-dump--core-file)
@@ -50,9 +49,6 @@ An error that represents a known state of the program. To paraphrase the
 > the network (e.g., socket hang-up), or a remote service (e.g., a 500 error,
 > failure to connect, or the like).
 
-Notably, operational errors that are not accounted for by the programmer are
-considered unexpected errors.
-
 ### Programmer Error
 
 An error that represents a mistake on the programmer's behalf. To paraphrase the
@@ -61,25 +57,6 @@ An error that represents a mistake on the programmer's behalf. To paraphrase the
 > Programmer errors are bugs in the program. These are things that can always
 > be avoided by changing the code. They can never be handled properly (since by
 > definition the code in question is broken).
-
-By definition, these errors are unexpected.
-
-### Expected versus Unexpected
-
-Errors may be "expected" — anticipated by the program author at time of writing —
-or "unexpected" — unforeseen by the author.
-
-Programmer errors are _always_ unexpected (or else the programmer would not
-have made them!) Operational errors _may be_ unexpected — there may be an
-unaccounted-for operational state that the program enters. Unexpected errors
-are dangerous, and may cause the program to perform undesirable operations. The
-error symposium recommends that programs encountering unexpected errors should
-crash immediately.
-
-∅               | Programmer Error   | Operational Error
---------------- | ------------------ | ------------------
-**Expected**    | :no_entry_sign:    | :white_check_mark:
-**Unexpected**  | :white_check_mark: | :white_check_mark:
 
 #### A Note on Programmer/Operational Error Propagation
 
