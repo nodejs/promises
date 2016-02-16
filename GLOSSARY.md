@@ -28,6 +28,9 @@ An error that represents a known state of the program. To paraphrase the
 > the network (e.g., socket hang-up), or a remote service (e.g., a 500 error,
 > failure to connect, or the like).
 
+Notably, operational errors that are not accounted for by the programmer are
+considered unexpected errors.
+
 ### Programmer Error
 
 An error that represents a mistake on the programmer's behalf. To paraphrase the
@@ -36,6 +39,25 @@ An error that represents a mistake on the programmer's behalf. To paraphrase the
 > Programmer errors are bugs in the program. These are things that can always
 > be avoided by changing the code. They can never be handled properly (since by
 > definition the code in question is broken).
+
+By definition, these errors are unexpected.
+
+### Expected versus Unexpected
+
+Errors may be "expected" — anticipated by the program author at time of writing —
+or "unexpected" — unforeseen by the author.
+
+Programmer errors are _always_ unexpected (or else the programmer would not
+have made them!) Operational errors _may be_ unexpected — there may be an
+unaccounted-for operational state that the program enters. Unexpected errors
+are dangerous, and may cause the program do perform undesirable operations. The
+error symposium recommends that programs encountering unexpected errors should
+crash immediately.
+
+∅               | Programmer Error   | Operational Error
+--------------- | ------------------ | ------------------
+**Expected**    | :no_entry_sign:    | :white_check_mark:
+**Unexpected**  | :white_check_mark: | :white_check_mark:
 
 ## Post Mortem Analysis
 
@@ -131,9 +153,10 @@ new Promise(function Excecutor (resolve, reject) {
 
 A function passed to `Promise#then` or `Promise#catch`. Receives as an argument
 the parent promise's resolved value or rejected error. Represents a new
-`Promise`. May return a value `T` or `Promise<T>`, which resolves the new
-promise to `T`, or throw an error `R` or return a rejected Promise, with
-rejects the promise with `R`.
+`Promise`. A handler which returns a value `T` or `Promise<T>` will resolve the
+new promise with `T`. A handler which throws an error `R`, or returns a
+`Promise` which itself eventually rejects (or has already rejected) with `R`,
+will reject the new promise with `R`.
 
 ```js
 
