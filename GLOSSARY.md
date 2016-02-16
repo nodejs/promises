@@ -137,7 +137,7 @@ value `Promise<T>`. The process of casting `T` to `Promise<T>` is known as
 "resolution". Any value `Promise<T>` may be unwrapped to `T` by passing a
 handler (defined below) to `.then`. Unwrapping via `.then` creates a new
 `Promise` that will resolve to the return value of the handler. One promise
-may have zero-to-many dependent promises.
+may have zero-to-many child promises.
 
 Errors will propagate from a source promise to all child promises. This process
 is known as "rejection". If a rejected promise has no children, it is
