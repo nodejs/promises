@@ -251,7 +251,7 @@ may synchronously transition from unhandled to handled:
 
 ```js
 const p1 = new Promise(() => { throw new Error('xyz')})
-const p2 = p1.catch(() => { /* err === [Error: xyz] */ })
+const p2 = p1.catch(err => { /* err === [Error: xyz] */ })
 // calls executor
 //   rejects
 //   calls unhandled rejection with p1 and error
