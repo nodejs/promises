@@ -133,11 +133,10 @@ The 30-second version:
 A [well-specified][promises-aplus] pattern that provides a container type
 designed to describe the dependence graph of asynchronous operations within a
 program. As a container type, any value `T` may be cast to an asynchronous
-value `Promise<T>`. The process of casting `T` to `Promise<T>` is known as
-"resolution". Any value `Promise<T>` may be unwrapped to `T` by passing a
+value `Promise<T>`. Any value `Promise<T>` may be unwrapped to `T` by passing a
 handler (defined below) to `.then`. Unwrapping via `.then` creates a new
-`Promise` that will resolve to the return value of the handler. One promise
-may have zero-to-many child promises.
+`Promise` that will resolve to the return value of the handler. One promise may
+have zero-to-many child promises.
 
 Errors will propagate from a source promise to all child promises. If a
 rejected promise has no children, it is considered an unhandled rejection. It
@@ -252,7 +251,7 @@ may synchronously transition from unhandled to handled:
 
 ```js
 const p1 = new Promise(() => { throw new Error('xyz')})
-const p2 = p1.catch(() => {})
+const p2 = p1.catch(() => { /* err === [Error: xyz] */ })
 // calls executor
 //   rejects
 //   calls unhandled rejection with p1 and error
