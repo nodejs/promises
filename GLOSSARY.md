@@ -139,27 +139,28 @@ handler (defined below) to `.then`. Unwrapping via `.then` creates a new
 `Promise` that will resolve to the return value of the handler. One promise
 may have zero-to-many child promises.
 
-Errors will propagate from a source promise to all child promises. This process
-is known as "rejection". If a rejected promise has no children, it is
-considered an unhandled rejection. It may be handled in a subsequent operation.
-If a promise has an error handler, propagation from source promises will halt
-at that promise. If a promise has many children, and only one handles errors,
-the other children will still be reported as unhandled rejections.
+Errors will propagate from a source promise to all child promises. If a
+rejected promise has no children, it is considered an unhandled rejection. It
+may be handled in a subsequent operation. If a promise has an error handler,
+propagation from source promises will halt at that promise. If a promise has
+many children, and only one handles errors, the other children will be
+unhandled rejections.
 
 Unwrapping `Promise<Promise<T>>` will automatically unwrap to `T`. That is:
 `.then(() => Promise.resolve(3)).then(val => console.log(val))` will
 output `3`.
 
 Internally, a promise is represented by a state machine that may be in one of
-three states — pending, resolved, or rejected. The resolved and rejected states
-are collectively referred to as "settled." Once a promise is settled, it cannot
-transition back into pending state.
+three states — pending, fulfilled, or rejected. The fulfilled and rejected
+states are collectively referred to as "settled." Once a promise is settled, it
+cannot transition into any other state.
 
 ### Executor / Resolver
 
 The function passed to the `new Promise` constructor. Run **synchronously**.
 Not in common direct use by most promise-users — used mainly to wrap sources of
-asynchrony. As such, it rarely resolves or rejects on the same tick.
+asynchrony. As such, it rarely resolves or rejects on the same tick. This API
+is provided for the express purpose of wrapping callback APIs.
 
 Catches all errors thrown. If an error is caught, the returned promise will be
 **rejected**. Because it starts life as a rejected promise with no children, it
@@ -173,19 +174,24 @@ new Promise(function Excecutor (resolve, reject) {
 
 ### Handler
 
-A function passed to `Promise#then` or `Promise#catch`. Receives as an argument
-the parent promise's resolved value or rejected error. Represents a new
-`Promise`. A handler which returns a value `T` or `Promise<T>` will resolve the
-new promise with `T`. A handler which throws an error `R`, or returns a
-`Promise` which itself eventually rejects (or has already rejected) with `R`,
-will reject the new promise with `R`.
+A function passed to `Promise#then` or `Promise#catch`. If the function is
+passed as the first argument to `Promise#then`, it is a **fulfillment**
+handler. Otherwise, if it is passed to `.catch` or as the second argument to
+`.then`, it is a **rejection** handler. Fulfillment handlers are called with
+the resolved value of the parent promise. Rejection handlers are called with
+the error value of the parent promise. Calling `.then` or `.catch` on a Promise
+`A` returns a new `Promise`, which is a child of `A`. A handler which returns a
+value `T` or `Promise<T>` will resolve the new promise with `T`. A handler
+which throws an error `R`, or returns a `Promise` which itself eventually
+rejects (or has already rejected) with `R`, will reject the new promise with
+`R`.
 
 ```js
 
-const p = new Promise(() => {})
+const p = new Promise(SomeOmittedExecutor)
 
 const p2 = p.then(function SuccessHandler(value) {
-  // fired if p resolves,
+  // fired if p fulfills,
 }, function ErrorHandler(err) {
   // fired if p rejects.
 })
@@ -200,7 +206,7 @@ const p4 = p3.then(function SuccessHandler (value) {
 })
 ```
 
-### Settling
+### Resolution / Settling
 
 The transition of a Promise from pending to a settled state, either "rejected"
 or "resolved." Once settled, a promise may never return to "pending" state.
@@ -213,15 +219,20 @@ Promise that rejects at some point in its lifetime. In the case of Executors,
 rejection may additionally be achieved by calling the `reject` callback
 provided as an argument.
 
-#### Resolving / resolve
+Rejection is analogous to a synchronous `throw`.
+
+#### Fulfillment / resolve
 
 The act of settling a promise with a value. Can be performed by the Executor or
 a Handler. Executors may only resolve by calling the `resolve` callback
-provided to them as an argument. In the case of Handlers, resolution is
-achieved by exiting the function normally _or_ by returning a value.
+provided to them as an argument, their return value is ignored. In the case of
+Handlers, fulfillment is achieved by returning a value from the Handler
+function.
 
-Resolving a Promise `A` using a Promise `B` will cause `A` to resolve or reject
-to the same value or error as `B`.
+Fulfilling a Promise `A` using a Promise `B` will cause `A` to resolve or
+reject to the same value or error as `B`. The resolution of `A` is dependent on
+the resolution of `B`: if `B` never settles, `A` will never settle. The process
+of fulfilling a promise with another promise is known as "assimilation".
 
 ### Synchronous Rejection
 
@@ -229,6 +240,8 @@ Sychronous rejection refers to the rare case where an executor is immediately
 rejected using `reject(<rejection>)` or `throw <rejection>`. In the case of the
 proposed Node Promise API, only invalid API use will trigger a synchronous
 rejection.
+
+May also be triggered by the helper method, `Promise.reject(<error>)`.
 
 ### Unhandled Rejection / Rejection Handled
 
@@ -247,17 +260,18 @@ const p2 = p1.catch(() => {})
 //   calls rejection handled with p1
 ```
 
-Node currently keeps track of extant rejections, and fires
+Node currently [keeps track of extant rejections][rejection-pr], and fires
 `process.on('unhandledRejection')` for any rejections that have not been
 handled at the end of the microtask queue.
 
 ### Microtask Queue
 
-The Microtask Queue is a specification-mandated queue of functions to be run
-at the exhaustion of a JavaScript stack. Promises feed into this queue: settled
-promises will enqueue a task to run handlers as they are added, pending promises
-with handlers will enqueue a task to run handlers when the promise settles. Other
-language-level features, like `Object.observe`, also feed into this queue.
+The Microtask Queue is a [specification-mandated queue][job-queue] of functions
+to be run at the exhaustion of a JavaScript stack. Promises feed into this
+queue: settled promises will enqueue a task to run handlers as they are added,
+pending promises with handlers will enqueue a task to run handlers when the
+promise settles. Other language-level features, like `Object.observe`, also
+feed into this queue.
 
 Currently this queue is opaque to Node. Node is not notified when new
 microtasks are queued, and Node may only tell V8 to run all of the microtasks
@@ -282,3 +296,5 @@ queued to completion — it can't run them one at a time.
 [joyent-errors]: https://www.joyent.com/developers/node/design/errors
 [node-errors]: http://nodejs.org/api/errors.html
 [symposium-findings]: http://github.com/groundwater/nodejs-symposiums/
+[rejection-pr]: https://github.com/nodejs/node/pull/758
+[job-queue]: http://www.ecma-international.org/ecma-262/6.0/index.html#sec-jobs-and-job-queues
