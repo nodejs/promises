@@ -4,6 +4,8 @@ This is a glossary of terms that will be commonly used in discussion. This list
 will be expanded in the future. **Please avoid changing existing headings as
 users may be deep-linking to the generated anchors.**
 
+## Table of Contents
+
 ## Error Symposium
 
 An ongoing series of facilitated discussions led by **@groundwater**, originally
@@ -241,6 +243,20 @@ Currently this queue is opaque to Node. Node is not notified when new
 microtasks are queued, and Node may only tell V8 to run all of the microtasks
 queued to completion — it can't run them one at a time.
 
+## Links
+
+* The public Microtask Queue API is defined [here][v8-public-microtask-api].
+* V8's promise implementation is defined [here][v8-promise-implementation].
+  * `%EnqueueMicrotask` is defined [here][v8-intrinsic], and runs [this code][v8-private-microtask-api].
+* V8's unhandled rejection API is defined [here][v8-unhandled-rejection-api].
+* V8's abort on uncaught behavior is defined [here][v8-abort].
+
+[v8-public-microtask-api]: https://github.com/v8/v8/blob/a26d0ac676ffc96a886e294728e69f5e7ba11b25/src/api.cc#L7399-L7414
+[v8-promise-implementation]: https://github.com/v8/v8/blob/a26d0ac676ffc96a886e294728e69f5e7ba11b25/src/js/promise.js
+[v8-intrinsic]: https://github.com/v8/v8/blob/a26d0ac676ffc96a886e294728e69f5e7ba11b25/src/runtime/runtime-observe.cc#L39
+[v8-private-microtask-api]: https://github.com/v8/v8/blob/a26d0ac676ffc96a886e294728e69f5e7ba11b25/src/isolate.cc#L2671-L2732
+[v8-unhandled-rejection-api]: https://github.com/v8/v8/blob/a26d0ac676ffc96a886e294728e69f5e7ba11b25/src/isolate.cc#L2652-L2668
+[v8-abort]: https://github.com/v8/v8/blob/a26d0ac676ffc96a886e294728e69f5e7ba11b25/src/isolate.cc#L1037-L1050
 [promises-aplus]: https://promisesaplus.com/
 [abort-syscall]: http://man7.org/linux/man-pages/man3/abort.3.html
 [joyent-errors]: https://www.joyent.com/developers/node/design/errors
