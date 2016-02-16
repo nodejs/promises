@@ -50,7 +50,7 @@ or "unexpected" — unforeseen by the author.
 Programmer errors are _always_ unexpected (or else the programmer would not
 have made them!) Operational errors _may be_ unexpected — there may be an
 unaccounted-for operational state that the program enters. Unexpected errors
-are dangerous, and may cause the program do perform undesirable operations. The
+are dangerous, and may cause the program to perform undesirable operations. The
 error symposium recommends that programs encountering unexpected errors should
 crash immediately.
 
