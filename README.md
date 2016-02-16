@@ -56,6 +56,7 @@ Working Group Members:
  - @MadaraUchiha
  - @omsmith
  - @thefourtheye
+ - @erights
  
 # Participation
 
