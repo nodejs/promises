@@ -81,6 +81,14 @@ crash immediately.
 **Expected**    | :no_entry_sign:    | :white_check_mark:
 **Unexpected**  | :white_check_mark: | :white_check_mark:
 
+#### A Note on Programmer/Operational Error Propagation
+
+These definitions do not describe the specific propagation method for these
+classes of errors. Either may appear as an error parameter to a nodeback
+function, or thrown by the API. The Error Symposium recommends only throwing
+on programmer error, while using the nodeback system to propagate operational
+errors.
+
 ## Post Mortem Analysis
 
 The practice of debugging a program after it has already crashed by inspecting
