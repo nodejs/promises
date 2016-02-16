@@ -194,7 +194,7 @@ const p3 = p2.catch(function ErrorHandler(value) {
   // fired if p2 rejects.
 })
 
-const p4.then(function SuccessHandler (value) { 
+const p4 = p3.then(function SuccessHandler (value) { 
   // resolved with p2's value if p2 resolves,
   // resolved with p3's value if p2 rejects and p3 resolves
 })
