@@ -47,8 +47,8 @@ related to promises.
 ### Membership
 
 Working Group Members:
- - @chrisdickinson
  - @benjamingr
+ - @refack
  - @petkaantonov
  - @vkurchatkin
  - @trevnorris
@@ -57,6 +57,7 @@ Working Group Members:
  - @omsmith
  - @thefourtheye
  - @erights
+ - @chrisdickinson
  
 # Participation
 
